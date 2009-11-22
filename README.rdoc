@@ -1,0 +1,4 @@
+= Twitter Bulk List Adder
+
+This app uses twitter oauth and the twitter api to allow you 
+to bulk add users to a group.
