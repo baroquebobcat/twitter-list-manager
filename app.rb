@@ -63,8 +63,7 @@ class TwitterListManager <Sinatra::Base
   end
 
   get '/connect' do
-    request_token = @client.authentication_request_token :oauth_callback=>  request.url[0..(-1-request.path.length)]
- + ENV['TWITTER_OAUTH_CALLBACK']
+    request_token = @client.authentication_request_token( :oauth_callback=>  request.url[0..(-1-request.path.length)] + ENV['TWITTER_OAUTH_CALLBACK'])
     session[:request_token] = request_token.token
     session[:request_token_secret]=request_token.secret
     redirect request_token.authorize_url.gsub('authorize','authenticate')
