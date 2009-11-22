@@ -55,10 +55,10 @@ class TwitterListManager <Sinatra::Base
 
   get '/' do
     redirect '/home' if @user
-    '<a href=/connect>>connect through twitter</a>'
+    '<a href=/connect>connect through twitter</a>'
   end
 
-  get '/home'
+  get '/home' do
     haml :home
   end
 
