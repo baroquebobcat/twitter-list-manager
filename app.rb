@@ -72,7 +72,8 @@ class TwitterListManager <Sinatra::Base
   get '/auth' do
     @access_token = @client.authorize(
         session[:request_token],
-        session[:request_token_secret]
+        session[:request_token_secret],
+:oauth_callback=>  (request.url[0..(-1-request.path.length)] + ENV['TWITTER_OAUTH_CALLBACK'])
     )
     if @client.authorized?
       session[:access_token] = @access_token.token
