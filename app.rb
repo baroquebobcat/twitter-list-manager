@@ -63,10 +63,10 @@ class TwitterListManager <Sinatra::Base
   end
 
   get '/connect' do
-    request_token = @client.request_token
+    request_token = @client.authentication_request_token
     session[:request_token] = request_token.token
     session[:request_token_secret]=request_token.secret
-    redirect request_token.authorize_url.gsub('authorize','authenticate')
+    redirect request_token.authorize_url#.gsub('authorize','authenticate')
   end
 
   get '/auth' do
