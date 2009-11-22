@@ -1,0 +1,18 @@
+!!!
+%html
+  %head
+    %title Twitter list Manager
+  %body
+    %h1 Twitter List Manager
+    %form{:action =>'/update_list',:method=>:post}
+      %br
+      What list do you want to add to?
+      %br
+      %input{:type=>:text,:name=>'list_name'}
+      %br
+      Who do you want to add(comma spaced)
+      %br
+      %textarea{:name=>'usernames'}
+      %br
+      %input{:type=>:submit}
+= @user.inspect

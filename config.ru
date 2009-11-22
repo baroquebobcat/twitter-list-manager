@@ -1,3 +1,3 @@
 require 'app'
 
-run TwitterBulkListAdder
+run TwitterListManager
