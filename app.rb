@@ -40,6 +40,7 @@ class TwitterListManager < Sinatra::Base
       :consumer_key=>ENV['TWITTER_OAUTH_KEY'],
       :consumer_secret=>ENV['TWITTER_OAUTH_SECRET']
     }
+    @@callback = ENV['TWITTER_OAUTH_CALLBACK']
   end
 
   before do
@@ -63,7 +64,7 @@ class TwitterListManager < Sinatra::Base
   end
 
   get '/connect' do
-    request_token = @client.authentication_request_token( :oauth_callback=>  request.url[0..(-1-request.path.length)] + ENV['TWITTER_OAUTH_CALLBACK'])
+    request_token = @client.authentication_request_token( :oauth_callback=>  ENV['TWITTER_OAUTH_CALLBACK'])
     session[:request_token] = request_token.token
     session[:request_token_secret]=request_token.secret
     redirect request_token.authorize_url.gsub('authorize','authenticate')
@@ -71,11 +72,10 @@ class TwitterListManager < Sinatra::Base
 
   get '/auth' do
     begin
-    puts "#{request.url[0..(-1-request.path.length)]}#{ENV['TWITTER_OAUTH_CALLBACK']}"
       @access_token = @client.authorize(
           session[:request_token],
           session[:request_token_secret],
-          :oauth_callback=>  "#{request.url[0..(-1-request.path.length)]}#{ENV['TWITTER_OAUTH_CALLBACK']}"
+          :oauth_callback=>  ENV['TWITTER_OAUTH_CALLBACK']
        )
     rescue OAuth::Unauthorized => e
      p e
