@@ -60,7 +60,7 @@ class TwitterListManager < Sinatra::Base
   end
 
   get '/home' do
-    @lists = @client.lists session[:user]["screen_name"]
+    @lists = @client.lists(session[:user]["screen_name"])["lists"]
     haml :home
   end
 
