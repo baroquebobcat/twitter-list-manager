@@ -1,0 +1,12 @@
+!!!
+%html
+  %head
+  %body
+    %h1
+      W00t!
+    %form{:action=> '/update_list',:method=> :post}
+      %p
+        What List Do you Want to add to?
+        %input{:type=>:text,:name=>'list_name'}
+      %textarea{:name=>'usernames'}
+      %input{:type=>'submit',:value=>'update'}
