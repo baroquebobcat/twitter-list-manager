@@ -8,7 +8,7 @@
       %br
       What list do you want to add to?
       - @lists.each do | list|
-        %input{:type=>:radio,:name=> 'list_name',:value=>list}=list
+        %input{:type=>:radio,:name=> 'list_name',:value=>list["name"]}=list["name"]
       %br
       %input{:type=>:text,:name=>'new_list_name'}
       %br
