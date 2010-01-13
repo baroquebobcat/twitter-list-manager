@@ -47,7 +47,7 @@ class TwitterListManager < Sinatra::Base
     @client = TwitterOAuth::Client.new(
       @@config.merge(
         :token  => session[:access_token],
-	:secret => session[:secret_token]
+        :secret => session[:secret_token]
       )
     )
     @rate_limit_status = @client.rate_limit_status
@@ -70,11 +70,14 @@ class TwitterListManager < Sinatra::Base
   end
 
   get '/auth' do
-    @access_token = @client.authorize(
-        session[:request_token],
-        session[:request_token_secret],
-:oauth_callback=>  "#{request.url[0..(-1-request.path.length)]}#{ENV['TWITTER_OAUTH_CALLBACK']}"
-    )
+    begin
+      @access_token = @client.authorize(
+          session[:request_token],
+          session[:request_token_secret],
+          :oauth_callback=>  "#{request.url[0..(-1-request.path.length)]}#{ENV['TWITTER_OAUTH_CALLBACK']}"
+       )
+    rescue OAuth::Unauthorized
+    end
     if @client.authorized?
       session[:access_token] = @access_token.token
       session[:secret_token] = @access_token.secret
