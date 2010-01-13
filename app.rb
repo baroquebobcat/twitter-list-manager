@@ -71,12 +71,14 @@ class TwitterListManager < Sinatra::Base
 
   get '/auth' do
     begin
+    puts "#{request.url[0..(-1-request.path.length)]}#{ENV['TWITTER_OAUTH_CALLBACK']}"
       @access_token = @client.authorize(
           session[:request_token],
           session[:request_token_secret],
           :oauth_callback=>  "#{request.url[0..(-1-request.path.length)]}#{ENV['TWITTER_OAUTH_CALLBACK']}"
        )
-    rescue OAuth::Unauthorized
+    rescue OAuth::Unauthorized => e
+     p e
     end
     if @client.authorized?
       session[:access_token] = @access_token.token
@@ -84,7 +86,8 @@ class TwitterListManager < Sinatra::Base
       session[:user]=@client.info
       redirect '/home'
     else
-      status 403,'Not Authed'
+      status 403
+      'Not Authed'
     end
   end
 end
