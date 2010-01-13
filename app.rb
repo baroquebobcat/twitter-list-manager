@@ -75,7 +75,8 @@ class TwitterListManager < Sinatra::Base
       @access_token = @client.authorize(
           session[:request_token],
           session[:request_token_secret],
-          :oauth_callback=>  ENV['TWITTER_OAUTH_CALLBACK']
+          :oauth_callback=>  ENV['TWITTER_OAUTH_CALLBACK'],
+      :oauth_verifier => params[:oauth_verifier]
        )
     rescue OAuth::Unauthorized => e
      p e
