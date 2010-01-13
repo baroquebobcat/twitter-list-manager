@@ -30,7 +30,7 @@ end
 #
 # borrowed heavily from http://github.com/moomerman/sinitter
 #
-class TwitterListManager <Sinatra::Base
+class TwitterListManager < Sinatra::Base
 
   configure do
     set :sessions, true
