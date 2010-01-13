@@ -7,10 +7,12 @@
     %form{:action =>'/update_list',:method=>:post}
       %br
       What list do you want to add to?
+      - @lists.each do | list|
+        %input{:type=>:radio,:name=> 'list_name',:value=>list}=list
       %br
-      %input{:type=>:text,:name=>'list_name'}
+      %input{:type=>:text,:name=>'new_list_name'}
       %br
-      Who do you want to add(comma spaced)
+      Who do you want to add(one per line)
       %br
       %textarea{:name=>'usernames'}
       %br

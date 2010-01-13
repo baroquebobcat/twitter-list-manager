@@ -60,6 +60,7 @@ class TwitterListManager < Sinatra::Base
   end
 
   get '/home' do
+    @lists = @client.lists session[:user]["screen_name"]
     haml :home
   end
 
@@ -75,8 +76,7 @@ class TwitterListManager < Sinatra::Base
       @access_token = @client.authorize(
           session[:request_token],
           session[:request_token_secret],
-          :oauth_callback=>  ENV['TWITTER_OAUTH_CALLBACK'],
-      :oauth_verifier => params[:oauth_verifier]
+          :oauth_verifier => params[:oauth_verifier]
        )
     rescue OAuth::Unauthorized => e
      p e
@@ -90,5 +90,17 @@ class TwitterListManager < Sinatra::Base
       status 403
       'Not Authed'
     end
+  end
+  
+  get '/disconnect' do
+    session[:user] = nil
+    session[:request_token] = nil
+    session[:request_token_secret] = nil
+    session[:access_token] = nil
+    session[:secret_token] = nil
+    redirect '/'
+  end
+  
+  post '/update_list' do
   end
 end
