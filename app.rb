@@ -44,6 +44,22 @@ class TwitterListManager < Sinatra::Base
     haml :lists
   end
 
+  post '/update_list/:list_name' do
+    @list = @user.list params[:list]
+    pass unless @list
+    if params['lists'][@list.slug]['remove_members']
+      params['lists'][@list.slug]['remove_members'].each do |screen_name,_|
+        @list.remove_member screen_name
+      end
+    end
+    unless !params['lists'][@list.slug]['new_members'] || params['lists'][@list.slug]['new_members'].empty?
+      params['lists'][@list.slug]['new_members'].split.each do |screen_name|
+        @list.add_member screen_name
+      end
+    end
+    redirect '/'
+  end
+
   get '/connect' do
     request_token = @client.authentication_request_token( :oauth_callback=> ENV['TWITTER_OAUTH_CALLBACK'])
     session[:request_token] = request_token.token
@@ -81,6 +97,5 @@ class TwitterListManager < Sinatra::Base
     redirect '/'
   end
   
-  post '/update_list' do
-  end
+
 end
