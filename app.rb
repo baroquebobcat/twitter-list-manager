@@ -34,7 +34,7 @@ class TwitterListManager < Sinatra::Base
     @user = TwitterOAuth::User.new @client, session[:user] if session[:user]
     @rate_limit_status = @client.rate_limit_status
     
-    redirect '/login' unless @user
+    redirect '/login' unless @user || ['/login','/auth','/connect'].include?(request.path_info)
   end
 
   get '/login' do

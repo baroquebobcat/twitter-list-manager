@@ -22,17 +22,29 @@ describe TwitterListManager do
       last_response.location.should be_nil
       last_response.should be_ok
     end
+    
+  end
+  
+  describe 'GET /login' do
+    it 'is never redirected' do
+      get '/login'
+      last_response.location.should be_nil
+      last_response.should be_ok
+    end
   end
   
   describe 'PUT /:list' do
+  
     before do
       @list = mock('list',:slug=>'test',:remove_member=>true)
       @user.stub!(:list).and_return @list
     end
+  
     it 'gets the list from the user\'s lists' do
       @user.should_receive(:list).with('test').and_return @list
       put '/test', {'lists'=>{'test'=>{'new_members'=>''}}}, @authed_session
     end
+  
     it 'removes checked members from the list' do
       @list.should_receive(:remove_member).with 'tester'
       put '/test', {'lists'=>{'test'=>{'remove_members'=>{'tester'=>'on'}}}}, @authed_session
