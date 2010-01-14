@@ -18,7 +18,7 @@ module TwitterOAuth
     end
     
     def list list_name
-      List.new client.get_list(screen_name, list_name)
+      List.new client, client.get_list(screen_name, list_name)
     end
     
     def method_missing method, *args
