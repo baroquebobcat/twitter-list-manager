@@ -1,7 +1,11 @@
 %form{:action =>'/update_list',:method=>:post}
   %br
   What list do you want to add to?
-  - @lists.each do | list|
+  - @lists.each do |list|
+    %h4=list.name
+    %ul
+      - list.members.each do |user|
+        %li= user.screen_name
     %input{:type=>:radio,:name=> 'list_name',:value=>list["name"]}=list.name
   %br
   %label Or New List
