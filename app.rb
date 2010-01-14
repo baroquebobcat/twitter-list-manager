@@ -11,6 +11,9 @@ require 'lib/twitter_oauth_ext'
 class TwitterListManager < Sinatra::Base
 
   configure do
+  
+    enable :methodoverride 
+  
     set :sessions, true
     set :views, File.dirname(__FILE__) + '/views'
 
@@ -44,7 +47,7 @@ class TwitterListManager < Sinatra::Base
     haml :lists
   end
 
-  post '/update_list/:list' do
+  put '/:list' do
     @list = @user.list params[:list]
     pass unless @list
     if params['lists'][@list.slug]['remove_members']
@@ -60,6 +63,14 @@ class TwitterListManager < Sinatra::Base
     redirect '/'
   end
 
+
+  post '/new_list' do
+    @user.new_list params['list']['name'], params['list']['private'] ? {:mode=>'private'} : {}
+  end
+  
+  delete '/:list' do
+  end
+  
   get '/connect' do
     request_token = @client.authentication_request_token( :oauth_callback=> ENV['TWITTER_OAUTH_CALLBACK'])
     session[:request_token] = request_token.token

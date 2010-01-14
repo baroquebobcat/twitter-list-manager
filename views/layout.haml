@@ -4,4 +4,7 @@
     %title Twitter list Manager
   %body
     %h1 Twitter List Manager
-    = yield
+    .header
+      %a{:href=>'/disconnect'} Logout
+    .main
+      = yield

@@ -21,6 +21,14 @@ module TwitterOAuth
       List.new client, client.get_list(screen_name, list_name)
     end
     
+    def new_list list_name,options={}
+      client.create_list screen_name, list_name, options
+    end
+    
+    def destroy_list list_name
+      client.delete_list screen_name, list_name
+    end
+    
     def method_missing method, *args
       info[method.to_s]
     end
@@ -46,6 +54,10 @@ module TwitterOAuth
     
     def members
       client.list_members(user['screen_name'], slug)['users'].map{|user| User.new(client,user)}
+    end
+    
+    def private?
+      mode == 'private'
     end
     
     def method_missing method, *args

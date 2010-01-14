@@ -24,32 +24,40 @@ describe TwitterListManager do
     end
   end
   
-  describe 'POST /update_list/:list' do
+  describe 'PUT /:list' do
     before do
       @list = mock('list',:slug=>'test',:remove_member=>true)
       @user.stub!(:list).and_return @list
     end
     it 'gets the list from the user\'s lists' do
       @user.should_receive(:list).with('test').and_return @list
-      post '/update_list/test', {'lists'=>{'test'=>{'new_members'=>''}}}, @authed_session
+      put '/test', {'lists'=>{'test'=>{'new_members'=>''}}}, @authed_session
     end
     it 'removes checked members from the list' do
       @list.should_receive(:remove_member).with 'tester'
-      post '/update_list/test', {'lists'=>{'test'=>{'remove_members'=>{'tester'=>'on'}}}}, @authed_session
+      put '/test', {'lists'=>{'test'=>{'remove_members'=>{'tester'=>'on'}}}}, @authed_session
     end
     
     it 'adds users listed in the text area' do
       @list.should_receive(:add_member).with 'tester'
       @list.should_receive(:add_member).with 'toaster'
-      post '/update_list/test', {'lists'=>{'test'=>{'new_members'=>'tester toaster'}}}, @authed_session
+      put '/test', {'lists'=>{'test'=>{'new_members'=>'tester toaster'}}}, @authed_session
     end
     
     describe 'missing list' do
       it 'should be 404 if the list does not exist' do
         @user.stub!(:list).and_return nil
-        post '/update_list/test', {'lists'=>{'test'=>{'remove_members'=>{'tester'=>'on'}}}}, @authed_session
+        put '/test', {'lists'=>{'test'=>{'remove_members'=>{'tester'=>'on'}}}}, @authed_session
         last_response.status.should == 404
       end
     end
   end
+  
+  describe 'POST /new_list' do
+    it 'creates a new list' do
+      @user.should_receive(:new_list).with('test',{})
+      post '/new_list',{'list'=>{'name'=>'test'}},@authed_session
+    end
+  end
+  
 end

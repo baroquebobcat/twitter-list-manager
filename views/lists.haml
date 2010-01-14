@@ -2,8 +2,15 @@
 
 - @lists.each do |list|
   .list
-    %h4=list.name
+    %h4
+      =list.name
+      - if list.private?
+        %tt (Private)
+      %form{:action =>"/delete_list/#{list.slug}",:method=>:post}
+        %input{:type=>:hidden, :name=>:_method, :value=>:delete}
+        %input{:type=>:submit, :value=>'Delete'}
     %form{:action =>"/update_list/#{list.slug}",:method=>:post}
+      %input{:type=>:hidden, :name=>:_method, :value=>:put}
       %table
         %tr
           %td Member
@@ -14,15 +21,19 @@
             %td= user.screen_name
             %td
               %input{:type=>:checkbox, :name=>"lists[#{list.slug}][remove_members][#{user.screen_name}]"}
-      %p
-        %b Add new list members(whitespace separated)
-      %textarea{:name=>"lists[#{list.slug}][new_members]"}
+      %div
+        %p
+          %b Add new list members(whitespace separated)
+        %textarea{:name=>"lists[#{list.slug}][new_members]"}
       %input{:type=>:submit, :value=>'Update'}
 %br
-%form{:action =>'/update_list',:method=>:post}
+%form{:action =>'/new_list',:method=>:post}
   %h4 Or Create a New List
-  %input{:type=>:text,:name=>'new_list_name'}
+  %p
+    %label Name
+    %input{:type=>:text,:name=>'list[name]'}
+  %p
+    %label Private?
+    %input{:type=>:checkbox,:name=>'list[protected]'}
+  %textarea{:name=>"list[members]"}
   %input{:type=>:submit, :value=>'Create'}
-
-= @user.inspect
-= @lists
