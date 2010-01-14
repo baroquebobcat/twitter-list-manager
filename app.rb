@@ -75,7 +75,7 @@ class TwitterListManager < Sinatra::Base
   end
 
   before do
-    @user = session[:user]
+    @user = TwitterOAuth::User.new session[:user]
     @client = TwitterOAuth::Client.new(
       @@config.merge(
         :token  => session[:access_token],
@@ -115,7 +115,7 @@ class TwitterListManager < Sinatra::Base
     if @client.authorized?
       session[:access_token] = @access_token.token
       session[:secret_token] = @access_token.secret
-      session[:user]=TwitterOAuth::User.new @client
+      session[:user] = @client.info
       redirect '/lists'
     else
       status 403
