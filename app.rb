@@ -75,13 +75,13 @@ class TwitterListManager < Sinatra::Base
   end
 
   before do
-    @user = TwitterOAuth::User.new session[:user]
     @client = TwitterOAuth::Client.new(
       @@config.merge(
         :token  => session[:access_token],
         :secret => session[:secret_token]
       )
     )
+    @user = TwitterOAuth::User.new @client,session[:user]
     @rate_limit_status = @client.rate_limit_status
   end
 
