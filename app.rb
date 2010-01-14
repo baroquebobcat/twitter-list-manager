@@ -82,7 +82,7 @@ class TwitterListManager < Sinatra::Base
         :secret => session[:secret_token]
       )
     )
-    @user = TwitterOAuth::User.new @client,session[:user]
+    @user = TwitterOAuth::User.new @client, session[:user] if session[:user]
     @rate_limit_status = @client.rate_limit_status
   end
 
