@@ -6,10 +6,10 @@
       =list.name
       - if list.private?
         %tt (Private)
-      %form{:action =>"/delete_list/#{list.slug}",:method=>:post}
+      %form{:action =>"/#{list.slug}",:method=>:post}
         %input{:type=>:hidden, :name=>:_method, :value=>:delete}
         %input{:type=>:submit, :value=>'Delete'}
-    %form{:action =>"/update_list/#{list.slug}",:method=>:post}
+    %form{:action =>"/#{list.slug}",:method=>:post}
       %input{:type=>:hidden, :name=>:_method, :value=>:put}
       %table
         %tr
