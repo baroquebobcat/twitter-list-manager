@@ -1,3 +1,4 @@
+#http://gist.github.com/276691
 module Rack
   class GoogleAnalytics
     TRACKING_CODE = <<-EOCODE

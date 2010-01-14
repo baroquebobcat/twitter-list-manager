@@ -6,7 +6,8 @@ require 'haml'
 require 'lib/twitter_oauth_ext'
 
 #
-# borrowed heavily from http://github.com/moomerman/sinitter
+# borrows parts of http://github.com/moomerman/sinitter,
+# moomerman's example of how to use twitter_oauth
 #
 class TwitterListManager < Sinatra::Base
 

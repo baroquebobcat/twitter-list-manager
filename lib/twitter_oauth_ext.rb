@@ -1,8 +1,7 @@
 
-
-##http://github.com/banux/twitter_oauth/blob/159f46d45e93f8a211c7629c44afb8bba95910c5/lib/twitter_oauth/lists.rb
-
-##
+#
+# Some additional domain model classes for twitter oauth.
+#
 module TwitterOAuth
 
   class User
