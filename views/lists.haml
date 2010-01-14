@@ -11,7 +11,7 @@
       min):
     = @rate_limit_status['remaining_hits']
     \/
-    @rate_limit_status['hourly_limit']
+    = @rate_limit_status['hourly_limit']
 - @lists.each do |list|
   .list
     %h4
