@@ -2,11 +2,16 @@
   %p
     %b Lists:
     = @lists.length
-    /
+    \/
     20
   %p
-    %b Requests Left:
-    = @rate_limit_status
+    %b
+      Requests Left Til Next Reset(~
+      = (@rate_limit_status['reset_time_in_seconds'].to_i-Time.now.to_i)/60
+      min):
+    = @rate_limit_status['remaining_hits']
+    \/
+    @rate_limit_status['hourly_limit']
 - @lists.each do |list|
   .list
     %h4

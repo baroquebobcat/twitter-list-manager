@@ -2,7 +2,7 @@ require 'spec_helper'
 describe TwitterListManager do
   before do 
     TwitterOAuth::Client.stub!(:new).and_return(@client=mock('client',
-      :rate_limit_status=>100
+      :rate_limit_status=>{"remaining_hits"=>150,"hourly_limit"=>150,"reset_time_in_seconds"=>0,"reset_time"=>"Sat Jan 01 00:00:00 UTC 2000"}
     ))
     TwitterOAuth::User.stub!(:new).and_return(@user = mock('user'))
     @authed_session = {'rack.session'=>{:user => {'screen_name'=>'tester'}}}
