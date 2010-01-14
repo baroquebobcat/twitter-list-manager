@@ -9,12 +9,13 @@ module TwitterOAuth
   class User
     attr_accessor :client,:info
     
-    def initialize client,info=nil
+    def initialize client,info
       self.client = client
-      self.info ||= client.info
+      self.info = info
     end
     
     def lists
+      p screen_name
       client.get_lists(screen_name)['lists'].map {|list| List.new client, list}
     end
     
