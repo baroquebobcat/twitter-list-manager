@@ -70,12 +70,23 @@ describe TwitterListManager do
       @user.should_receive(:new_list).with('test',{})
       post '/new_list',{'list'=>{'name'=>'test'}},@authed_session
     end
+    it 'redirects back to \'/\'' do
+      @user.stub!(:new_list)
+      post '/new_list',{'list'=>{'name'=>'test'}},@authed_session
+      last_response.location.should == '/'
+    end
   end
   
   describe 'DELETE /:list' do
     it 'destroys the list' do
       @user.should_receive(:destroy_list).with('test')
       delete '/test',{},@authed_session
+    end
+    
+    it 'redirects back to \'/\'' do
+      @user.stub!(:destroy_list)
+      delete '/test',{},@authed_session
+      last_response.location.should == '/'
     end
     
   end

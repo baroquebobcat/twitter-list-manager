@@ -67,10 +67,12 @@ class TwitterListManager < Sinatra::Base
 
   post '/new_list' do
     @user.new_list params['list']['name'], params['list']['private'] ? {:mode=>'private'} : {}
+    redirect '/'
   end
   
   delete '/:list' do
     @user.destroy_list params[:list]
+    redirect '/'
   end
   
   get '/connect' do
