@@ -66,7 +66,10 @@ class TwitterListManager < Sinatra::Base
 
 
   post '/new_list' do
-    @user.new_list params['list']['name'], params['list']['private'] ? {:mode=>'private'} : {}
+    @list = @user.new_list params['list']['name'], params['list']['private'] ? {:mode=>'private'} : {}
+    params['list']['members'].split.each do |screen_name|
+      @list.add_member screen_name
+    end
     redirect '/'
   end
   

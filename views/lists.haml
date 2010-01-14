@@ -1,5 +1,12 @@
-%br
-
+%div
+  %p
+    %b Lists:
+    = @lists.length
+    /
+    20
+  %p
+    %b Requests Left:
+    = @rate_limit_status
 - @lists.each do |list|
   .list
     %h4

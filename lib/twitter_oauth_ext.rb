@@ -21,7 +21,7 @@ module TwitterOAuth
     end
     
     def new_list list_name,options={}
-      client.create_list screen_name, list_name, options
+      List.new client, client.create_list(screen_name, list_name, options)
     end
     
     def destroy_list list_name

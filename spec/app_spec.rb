@@ -68,11 +68,18 @@ describe TwitterListManager do
   describe 'POST /new_list' do
     it 'creates a new list' do
       @user.should_receive(:new_list).with('test',{})
-      post '/new_list',{'list'=>{'name'=>'test'}},@authed_session
+      post '/new_list',{'list'=>{'name'=>'test','members'=>''}},@authed_session
+    end
+    
+    it 'adds members if there are some' do
+      @user.should_receive(:new_list).with('test',{}).and_return @list
+      @list.should_receive(:add_member).with 'tester'
+      post '/new_list',{'list'=>{'name'=>'test','members'=>'tester '}},@authed_session
+      
     end
     it 'redirects back to \'/\'' do
       @user.stub!(:new_list)
-      post '/new_list',{'list'=>{'name'=>'test'}},@authed_session
+      post '/new_list',{'list'=>{'name'=>'test','members'=>''}},@authed_session
       last_response.location.should == '/'
     end
   end
