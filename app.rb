@@ -40,7 +40,7 @@ class TwitterListManager < Sinatra::Base
   end
 
   get '/' do
-    @lists = @user.lists
+    @lists = @user.lists.sort{|a,b|a.name<=>b.name}
     haml :lists
   end
 

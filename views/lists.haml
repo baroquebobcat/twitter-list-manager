@@ -9,7 +9,7 @@
           %td Member
           %td
             Remove User
-        - list.members.each do |user|
+        - list.members.sort{|a,b|a.screen_name <=> b.screen_name}.each do |user|
           %tr
             %td= user.screen_name
             %td
