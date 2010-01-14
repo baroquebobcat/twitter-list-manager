@@ -1,4 +1,16 @@
-= Twitter Bulk List Adder
+= twitter-list-manager
 
-This app uses twitter oauth and the twitter api to allow you 
-to bulk add users to a group.
+A sinatra based, OAuth using list manager for twitter.
+ 
+I wrote it after someone mentioned being annoyed because they couldn't add multiple people to lists at once.
+
+It allows you to add and remove members from lists, and to create and destroy lists.
+
+Essentially all the things you can do from twitter anyway, but you add users by typing a bunch of screen names into a text area, which is pretty neat.
+ 
+It uses twitter_oauth and is geared toward heroku deployment--see http://twitter-list-manager.heroku.com/
+
+It needs three environment variables set to work
+* TWITTER_OAUTH_KEY
+* TWITTER_OAUTH_SECRET
+* TWITTER_OAUTH_CALLBACK
