@@ -5,23 +5,54 @@ require 'haml'
 
 ##http://github.com/banux/twitter_oauth/blob/159f46d45e93f8a211c7629c44afb8bba95910c5/lib/twitter_oauth/lists.rb
 module TwitterOAuth
-  class Client
- 
-    def lists(user)
-      oauth_response = access_token.get("/#{user}/lists.json")
-      JSON.parse(oauth_response.body)
+
+  class User
+    attr_accessor :client,:info
+    
+    def initialize client,info=nil
+      self.client = client
+      self.info ||= client.info
     end
- 
-    def list_members(user, list, cursor="-1")
-      oauth_response = access_token.get("/#{user}/#{list}/members.json?cursor=" + cursor)
-      JSON.parse(oauth_response.body)
+    
+    def lists
+      client.get_lists(screen_name)['lists'].map {|list| List.new client, list}
     end
- 
-    def subscribers(user)
-      oauth_response = access_token.get("/#{user}/subscribers.json", options)
-      JSON.parse(oauth_response.body)
+    
+    def list list_name
+      List.new client.get_list(screen_name, list_name)
     end
- 
+    
+    def method_missing method, *args
+      info[method.to_s]
+    end
+  end
+  
+  
+  class List
+    
+    attr_accessor :client,:info
+    #info here is the result of client.get_list
+    def initialize client,info
+      self.info = info
+      self.client = client
+    end
+    
+    def add_member screen_name
+      client.add_member_to_list user['screen_name'],slug, client.show(screen_name)["id"]
+    end
+    
+    def remove_member screen_name
+      client.remove_member_from_list user['screen_name'],slug, client.show(screen_name)["id"]
+    end
+    
+    def members
+      client.list_members(user['screen_name'], slug).map{|user| User.new(client,user)}
+    end
+    
+    def method_missing method, *args
+      info[method.to_s]
+    end
+    
   end
 end
  
@@ -59,13 +90,13 @@ class TwitterListManager < Sinatra::Base
     '<a href=/connect>connect through twitter</a>'
   end
 
-  get '/home' do
-    @lists = @client.lists(session[:user]["screen_name"])["lists"]
-    haml :home
+  get '/lists' do
+    @lists = @user.lists
+    haml :lists
   end
 
   get '/connect' do
-    request_token = @client.authentication_request_token( :oauth_callback=>  ENV['TWITTER_OAUTH_CALLBACK'])
+    request_token = @client.authentication_request_token( :oauth_callback=> ENV['TWITTER_OAUTH_CALLBACK'])
     session[:request_token] = request_token.token
     session[:request_token_secret]=request_token.secret
     redirect request_token.authorize_url.gsub('authorize','authenticate')
@@ -84,7 +115,7 @@ class TwitterListManager < Sinatra::Base
     if @client.authorized?
       session[:access_token] = @access_token.token
       session[:secret_token] = @access_token.secret
-      session[:user]=@client.info
+      session[:user]=TwitterOAuth::User.new @client
       redirect '/home'
     else
       status 403

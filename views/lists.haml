@@ -1,0 +1,16 @@
+%form{:action =>'/update_list',:method=>:post}
+  %br
+  What list do you want to add to?
+  - @lists.each do | list|
+    %input{:type=>:radio,:name=> 'list_name',:value=>list["name"]}=list.name
+  %br
+  %label Or New List
+  %input{:type=>:text,:name=>'new_list_name'}
+  %br
+  Who do you want to add(one per line)
+  %br
+  %textarea{:name=>'usernames'}
+  %br
+  %input{:type=>:submit}
+= @user.inspect
+= @user.lists
