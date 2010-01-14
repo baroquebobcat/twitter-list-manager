@@ -47,7 +47,7 @@ module TwitterOAuth
     end
     
     def members
-      client.list_members(user['screen_name'], slug).map{|user| User.new(client,user)}
+      client.list_members(user['screen_name'], slug)['users'].map{|user| User.new(client,user)}
     end
     
     def method_missing method, *args
