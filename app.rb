@@ -69,6 +69,7 @@ class TwitterListManager < Sinatra::Base
   end
   
   delete '/:list' do
+    @user.destroy_list params[:list]
   end
   
   get '/connect' do

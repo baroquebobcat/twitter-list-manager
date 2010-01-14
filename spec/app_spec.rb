@@ -60,4 +60,11 @@ describe TwitterListManager do
     end
   end
   
+  describe 'DELETE /:list' do
+    it 'destroys the list' do
+      @user.should_receive(:destroy_list).with('test')
+      delete '/test',{},@authed_session
+    end
+    
+  end
 end
