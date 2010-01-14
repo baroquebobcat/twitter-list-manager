@@ -86,7 +86,7 @@ class TwitterListManager < Sinatra::Base
   end
 
   get '/' do
-    redirect '/home' if @user
+    redirect '/lists' if @user
     '<a href=/connect>connect through twitter</a>'
   end
 
