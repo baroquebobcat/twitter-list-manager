@@ -40,7 +40,7 @@ class TwitterListManager < Sinatra::Base
 
   get '/login' do
     redirect '/' if @user
-    '<a href=/connect>connect through twitter</a>'
+    haml :login
   end
 
   get '/' do

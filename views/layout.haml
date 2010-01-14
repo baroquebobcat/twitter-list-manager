@@ -5,6 +5,7 @@
   %body
     %h1 Twitter List Manager
     .header
-      %a{:href=>'/disconnect'} Logout
+      - if @user
+        %a{:href=>'/disconnect'} Logout
     .main
       = yield
