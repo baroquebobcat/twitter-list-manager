@@ -8,10 +8,13 @@ module TwitterOAuth
 
 class Client
       def post(url, body = '', headers = {})
-        p url
-        oauth_response = access_token.post(url, body, headers)
-        JSON.parse(oauth_response.body)
-      rescue StandardError
+      
+        begin
+          oauth_response = access_token.post(url, body, headers)
+          JSON.parse(oauth_response.body)
+        rescue StandardError=>e
+              p url
+        end
       end
 end
 
