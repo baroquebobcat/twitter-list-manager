@@ -6,5 +6,5 @@ log = File.new("log/sinatra.log", "a+")
 $stdout.reopen(log)
 $stderr.reopen(log)
 
-use Rack::GoogleAnalytics
+use Rack::GoogleAnalytics,ENV['GA_ID']
 run TwitterListManager
