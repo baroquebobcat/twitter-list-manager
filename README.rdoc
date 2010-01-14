@@ -14,3 +14,5 @@ It needs three environment variables set to work
 * TWITTER_OAUTH_KEY
 * TWITTER_OAUTH_SECRET
 * TWITTER_OAUTH_CALLBACK
+And for google analytics(cool rack middleware by the way)
+* GA_ID
