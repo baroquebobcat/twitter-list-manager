@@ -116,7 +116,7 @@ class TwitterListManager < Sinatra::Base
       session[:access_token] = @access_token.token
       session[:secret_token] = @access_token.secret
       session[:user]=TwitterOAuth::User.new @client
-      redirect '/home'
+      redirect '/lists'
     else
       status 403
       'Not Authed'
