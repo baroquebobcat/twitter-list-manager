@@ -92,6 +92,7 @@ class TwitterListManager < Sinatra::Base
 
   get '/lists' do
     @lists = @user.lists
+    p 'after lists'
     haml :lists
   end
 
