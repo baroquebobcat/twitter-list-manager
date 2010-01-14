@@ -2,18 +2,18 @@
   %br
   What list do you want to add to?
   - @lists.each do |list|
-    %h4=list.name
-    %ul
-      - list.members.each do |user|
-        %li= user.screen_name
-    %input{:type=>:radio,:name=> 'list_name',:value=>list["name"]}=list.name
+    .list
+      %h4=list.name
+      %table
+        - list.members.each do |user|
+          %tr
+            %td= user.screen_name
+      %textarea{:name=>'lists[list.slug][new_users]'}
+        
   %br
   %label Or New List
   %input{:type=>:text,:name=>'new_list_name'}
   %br
-  Who do you want to add(one per line)
-  %br
-  %textarea{:name=>'usernames'}
   %br
   %input{:type=>:submit}
 = @user.inspect
