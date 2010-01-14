@@ -11,6 +11,7 @@ class Client
         p url
         oauth_response = access_token.post(url, body, headers)
         JSON.parse(oauth_response.body)
+      rescue StandardError
       end
 end
 
