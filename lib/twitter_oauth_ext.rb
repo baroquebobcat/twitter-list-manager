@@ -5,19 +5,6 @@
 ##
 module TwitterOAuth
 
-
-class Client
-      def get(url)
-      
-        begin
-          oauth_response = access_token.get(url)
-          JSON.parse(oauth_response.body)
-        rescue StandardError=>e
-              p url
-        end
-      end
-end
-
   class User
     attr_accessor :client,:info
     

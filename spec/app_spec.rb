@@ -29,7 +29,10 @@ describe TwitterListManager do
       @list = mock('list',:slug=>'test',:remove_member=>true)
       @user.stub!(:list).and_return @list
     end
-
+    it 'gets the list from the user\'s lists' do
+      @user.should_receive(:list).with('test').and_return @list
+      post '/update_list/test', {'lists'=>{'test'=>{'new_members'=>''}}}, @authed_session
+    end
     it 'removes checked members from the list' do
       @list.should_receive(:remove_member).with 'tester'
       post '/update_list/test', {'lists'=>{'test'=>{'remove_members'=>{'tester'=>'on'}}}}, @authed_session

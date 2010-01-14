@@ -44,7 +44,7 @@ class TwitterListManager < Sinatra::Base
     haml :lists
   end
 
-  post '/update_list/:list_name' do
+  post '/update_list/:list' do
     @list = @user.list params[:list]
     pass unless @list
     if params['lists'][@list.slug]['remove_members']
