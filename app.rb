@@ -48,16 +48,16 @@ class TwitterListManager < Sinatra::Base
     haml :lists
   end
 
-  put '/:list' do
-    @list = @user.list params[:list]
+  put '/:list_name' do
+    @list = @user.list params[:list_name]
     pass unless @list
-    if params['lists'][@list.slug]['remove_members']
-      params['lists'][@list.slug]['remove_members'].each do |screen_name,_|
+    if params['list']['remove_members']
+      params['list']['remove_members'].each do |screen_name,_|
         @list.remove_member screen_name
       end
     end
-    unless !params['lists'][@list.slug]['new_members'] || params['lists'][@list.slug]['new_members'].empty?
-      params['lists'][@list.slug]['new_members'].split.each do |screen_name|
+    unless !params['list']['new_members'] || params['list']['new_members'].empty?
+      params['list']['new_members'].split.each do |screen_name|
         @list.add_member screen_name
       end
     end
@@ -73,13 +73,13 @@ class TwitterListManager < Sinatra::Base
     redirect '/'
   end
   
-  delete '/:list' do
-    @user.destroy_list params[:list]
+  delete '/:list_name' do
+    @user.destroy_list params[:list_name]
     redirect '/'
   end
   
   get '/connect' do
-    request_token = @client.authentication_request_token( :oauth_callback=> ENV['TWITTER_OAUTH_CALLBACK'])
+    request_token = @client.authentication_request_token(:oauth_callback=>@@callback)
     session[:request_token] = request_token.token
     session[:request_token_secret]=request_token.secret
     redirect request_token.authorize_url.gsub('authorize','authenticate')
@@ -102,7 +102,7 @@ class TwitterListManager < Sinatra::Base
       redirect '/'
     else
       status 403
-      'Not Authed'
+      'Not Authenticated'
     end
   end
   

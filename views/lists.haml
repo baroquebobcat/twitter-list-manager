@@ -32,11 +32,11 @@
           %tr
             %td= user.screen_name
             %td
-              %input{:type=>:checkbox, :name=>"lists[#{list.slug}][remove_members][#{user.screen_name}]"}
+              %input{:type=>:checkbox, :name=>"list[remove_members][#{user.screen_name}]"}
       %div
         %p
           %b Add new list members(whitespace separated)
-        %textarea{:name=>"lists[#{list.slug}][new_members]"}
+        %textarea{:name=>"list[new_members]"}
       %input{:type=>:submit, :value=>'Update'}
 %br
 %form{:action =>'/new_list',:method=>:post}
