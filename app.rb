@@ -4,11 +4,12 @@ require 'twitter_oauth'
 require 'haml'
 
 require 'lib/twitter_oauth_ext'
-
 #
-# borrows parts of http://github.com/moomerman/sinitter,
-# moomerman's example of how to use twitter_oauth
+# Started with http://github.com/moomerman/sinitter,
+# moomerman's example of how to use twitter_oauth,
+# and modified it.
 #
+# 
 class TwitterListManager < Sinatra::Base
 
   configure do
@@ -99,6 +100,7 @@ class TwitterListManager < Sinatra::Base
       session[:access_token] = @access_token.token
       session[:secret_token] = @access_token.secret
       session[:user] = @client.info
+
       redirect '/'
     else
       status 403
@@ -112,8 +114,8 @@ class TwitterListManager < Sinatra::Base
     session[:request_token_secret] = nil
     session[:access_token] = nil
     session[:secret_token] = nil
+
     redirect '/'
   end
-  
 
 end
