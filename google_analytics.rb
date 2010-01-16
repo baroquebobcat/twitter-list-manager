@@ -1,3 +1,4 @@
+# By Sam Pohlenz
 #http://gist.github.com/276691
 module Rack
   class GoogleAnalytics
