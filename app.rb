@@ -14,16 +14,17 @@ class TwitterListManager < Sinatra::Base
 
   configure do
   
-    enable :methodoverride 
-  
-    set :sessions, true
+    enable :methodoverride
+
     set :views, File.dirname(__FILE__) + '/views'
 
+    enable :sessions
     @@config = {
       :consumer_key=>ENV['TWITTER_OAUTH_KEY'],
       :consumer_secret=>ENV['TWITTER_OAUTH_SECRET']
     }
     @@callback = ENV['TWITTER_OAUTH_CALLBACK']
+    
   end
 
   before do
@@ -33,7 +34,9 @@ class TwitterListManager < Sinatra::Base
         :secret => session[:secret_token]
       )
     )
+    
     @user = TwitterOAuth::User.new @client, session[:user] if session[:user]
+    
     @rate_limit_status = @client.rate_limit_status
     
     redirect '/login' unless @user || ['/login','/auth','/connect'].include?(request.path_info)
@@ -68,9 +71,11 @@ class TwitterListManager < Sinatra::Base
 
   post '/new_list' do
     @list = @user.new_list params['list']['name'], params['list']['private'] ? {:mode=>'private'} : {}
+    
     params['list']['members'].split.each do |screen_name|
       @list.add_member screen_name
     end
+    
     redirect '/'
   end
   
