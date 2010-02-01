@@ -51,16 +51,30 @@ class TwitterListManager < Sinatra::Base
       @client.authentication_request_token(:oauth_callback=>options.twitter_oauth_config[:callback])
     end
     
-    def authenticate
+    def get_access_token
       setup_client
-  
-     begin
+      
+      begin
         @client.authorize(
             session[:request_token],
             session[:request_token_secret],
             :oauth_verifier => params[:oauth_verifier]
          )
       rescue OAuth::Unauthorized => e
+        nil
+      end
+    end
+    
+    def authenticate!
+      access_token = get_access_token
+    
+      if @client.authorized?
+        session[:access_token] = access_token.token
+        session[:secret_token] = access_token.secret
+        session[:user] = @client.info
+
+        session[:user]
+      else
         nil
       end
     end
@@ -125,12 +139,7 @@ class TwitterListManager < Sinatra::Base
   end
 
   get '/auth' do
-    access_token = authenticate
-    if @client.authorized?
-      session[:access_token] = access_token.token
-      session[:secret_token] = access_token.secret
-      session[:user] = @client.info
-
+    if authenticate!
       redirect '/'
     else
       status 403

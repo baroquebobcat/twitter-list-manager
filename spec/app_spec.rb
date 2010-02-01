@@ -125,7 +125,7 @@ describe TwitterListManager do
       it "redirects to '/'" do
         @client.stub!(:authorize).and_return(mock('access token',:null_object => true))
         @client.stub!(:authorized?).and_return true
-        @client.stub!(:info)
+        @client.stub!(:info).and_return(mock(:user))
         get '/auth'
         last_response.location.should == '/'
       end
