@@ -98,4 +98,17 @@ describe TwitterListManager do
     end
     
   end
+  
+  describe 'GET /connect' do
+    it 'gets a request token' do
+      @client.should_receive(:authentication_request_token).and_return(mock('request token',:authorize_url=>'http://example.com',:token=>'token',:secret=>'secret'))
+      get '/connect'
+    end
+    it 'redirects to the request token\'s auth url' do
+      @client.stub!(:authentication_request_token).and_return(token = mock('request token',:token=>'token',:secret=>'secret'))
+      token.should_receive(:authorize_url).and_return 'http://example.com'
+      get '/connect'
+      last_response.location.should == 'http://example.com'
+    end
+  end
 end
