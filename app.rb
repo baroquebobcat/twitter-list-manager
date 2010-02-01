@@ -120,7 +120,7 @@ class TwitterListManager < Sinatra::Base
     session[:access_token] = nil
     session[:secret_token] = nil
 
-    redirect '/'
+    redirect '/login'
   end
 
 end
