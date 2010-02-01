@@ -19,20 +19,18 @@ class TwitterListManager < Sinatra::Base
     set :views, File.dirname(__FILE__) + '/views'
 
     enable :sessions
-    @@config = {
-      :consumer_key=>ENV['TWITTER_OAUTH_KEY'],
-      :consumer_secret=>ENV['TWITTER_OAUTH_SECRET']
-    }
-    @@callback = ENV['TWITTER_OAUTH_CALLBACK']
-    
+    set :twitter_oauth_config, 
+      :key      =>ENV['TWITTER_OAUTH_KEY'],
+      :secret   =>ENV['TWITTER_OAUTH_SECRET'],
+      :callback => ENV['TWITTER_OAUTH_CALLBACK']
   end
 
   before do
     @client = TwitterOAuth::Client.new(
-      @@config.merge(
-        :token  => session[:access_token],
-        :secret => session[:secret_token]
-      )
+      :consumer_secret => options.twitter_oauth_config[:secret],
+      :consumer_key => options.twitter_oauth_config[:key],
+      :token  => session[:access_token],
+      :secret => session[:secret_token]
     )
     
     @user = TwitterOAuth::User.new @client, session[:user] if session[:user]
@@ -85,7 +83,7 @@ class TwitterListManager < Sinatra::Base
   end
   
   get '/connect' do
-    request_token = @client.authentication_request_token(:oauth_callback=>@@callback)
+    request_token = @client.authentication_request_token(:oauth_callback=>options.twitter_oauth_config[:callback])
     session[:request_token] = request_token.token
     session[:request_token_secret]=request_token.secret
     redirect request_token.authorize_url.gsub('authorize','authenticate')
