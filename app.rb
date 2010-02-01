@@ -46,6 +46,11 @@ class TwitterListManager < Sinatra::Base
       )
     end
     
+    def get_request_token
+      setup_client
+      @client.authentication_request_token(:oauth_callback=>options.twitter_oauth_config[:callback])
+    end
+    
     def authenticate
       setup_client
   
@@ -112,10 +117,7 @@ class TwitterListManager < Sinatra::Base
   end
   
   get '/connect' do
-    setup_client
-    
-    request_token = @client.authentication_request_token(:oauth_callback=>options.twitter_oauth_config[:callback])
-    
+    request_token = get_request_token
     session[:request_token] = request_token.token
     session[:request_token_secret]=request_token.secret
     
