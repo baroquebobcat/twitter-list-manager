@@ -104,11 +104,32 @@ describe TwitterListManager do
       @client.should_receive(:authentication_request_token).and_return(mock('request token',:authorize_url=>'http://example.com',:token=>'token',:secret=>'secret'))
       get '/connect'
     end
-    it 'redirects to the request token\'s auth url' do
+    it "redirects to the request token's auth url" do
       @client.stub!(:authentication_request_token).and_return(token = mock('request token',:token=>'token',:secret=>'secret'))
       token.should_receive(:authorize_url).and_return 'http://example.com'
       get '/connect'
       last_response.location.should == 'http://example.com'
+    end
+  end
+  
+  describe 'GET /auth' do
+    describe "on auth denied" do
+      it "responds with 'Not Authenticated' and a 403" do
+        @client.stub!(:authorize).and_raise OAuth::Unauthorized.new
+        @client.stub!(:authorized?).and_return false
+        get '/auth'
+        last_response.status.should == 403
+        last_response.body.should == 'Not Authenticated'
+      end
+    end
+    describe 'on auth success' do
+      it "redirects to '/'" do
+        @client.stub!(:authorize).and_return(mock('access token',:null_object => true))
+        @client.stub!(:authorized?).and_return true
+        @client.stub!(:info)
+        get '/auth'
+        last_response.location.should == '/'
+      end
     end
   end
 end

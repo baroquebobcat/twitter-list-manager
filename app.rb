@@ -99,7 +99,7 @@ class TwitterListManager < Sinatra::Base
           :oauth_verifier => params[:oauth_verifier]
        )
     rescue OAuth::Unauthorized => e
-     p e
+     e
     end
     if @client.authorized?
       session[:access_token] = @access_token.token
