@@ -65,6 +65,15 @@ class TwitterListManager < Sinatra::Base
       end
     end
     
+    def redirect_to_twitter_auth_url
+      request_token = get_request_token
+    
+      session[:request_token] = request_token.token
+      session[:request_token_secret]= request_token.secret
+    
+      redirect request_token.authorize_url.gsub('authorize','authenticate')
+    end
+    
     def authenticate!
       access_token = get_access_token
     
@@ -131,11 +140,7 @@ class TwitterListManager < Sinatra::Base
   end
   
   get '/connect' do
-    request_token = get_request_token
-    session[:request_token] = request_token.token
-    session[:request_token_secret]=request_token.secret
-    
-    redirect request_token.authorize_url.gsub('authorize','authenticate')
+    redirect_to_twitter_auth_url
   end
 
   get '/auth' do
