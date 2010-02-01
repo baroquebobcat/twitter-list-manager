@@ -132,9 +132,9 @@ describe TwitterListManager do
     end
   end
   
-  describe "GET /disconnect" do
+  describe "GET /logout" do
     it "redirects to /login" do
-      get '/disconnect',{},@authed_session
+      get '/logout',{},@authed_session
       last_response.location.should == '/login'
     end
   end

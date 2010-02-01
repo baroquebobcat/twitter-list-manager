@@ -160,7 +160,7 @@ class TwitterListManager < Sinatra::Base
     end
   end
   
-  get '/disconnect' do
+  get '/logout' do
     clear_oauth_session
     redirect '/login'
   end
