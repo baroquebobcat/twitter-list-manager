@@ -25,19 +25,25 @@ class TwitterListManager < Sinatra::Base
       :callback => ENV['TWITTER_OAUTH_CALLBACK']
   end
 
-  before do
-    @client = TwitterOAuth::Client.new(
-      :consumer_secret => options.twitter_oauth_config[:secret],
-      :consumer_key => options.twitter_oauth_config[:key],
-      :token  => session[:access_token],
-      :secret => session[:secret_token]
-    )
+  helpers do
+    def login_required
+      setup_client
+      
+      @user = TwitterOAuth::User.new(@client, session[:user]) if session[:user]
+      
+      @rate_limit_status = @client.rate_limit_status
+      
+      redirect '/login' unless @user
+    end
     
-    @user = TwitterOAuth::User.new(@client, session[:user]) if session[:user]
-    
-    @rate_limit_status = @client.rate_limit_status
-    
-    redirect '/login' unless @user || ['/login','/auth','/connect'].include?(request.path_info)
+    def setup_client
+      @client = TwitterOAuth::Client.new(
+        :consumer_secret => options.twitter_oauth_config[:secret],
+        :consumer_key => options.twitter_oauth_config[:key],
+        :token  => session[:access_token],
+        :secret => session[:secret_token]
+      )
+    end
   end
 
   get '/login' do
@@ -47,12 +53,16 @@ class TwitterListManager < Sinatra::Base
   end
 
   get '/' do
+    login_required
+    
     @lists = @user.lists.sort{|a,b|a.name<=>b.name}
     
     haml :lists
   end
 
   put '/:list_name' do
+    login_required
+    
     @list = @user.list params[:list_name]
     pass unless @list
     
@@ -73,6 +83,8 @@ class TwitterListManager < Sinatra::Base
 
 
   post '/new_list' do
+    login_required
+    
     @list = @user.new_list params['list']['name'], params['list']['private'] ? {:mode=>'private'} : {}
     
     params['list']['members'].split.each do |screen_name|
@@ -83,12 +95,16 @@ class TwitterListManager < Sinatra::Base
   end
   
   delete '/:list_name' do
+    login_required
+    
     @user.destroy_list params[:list_name]
     
     redirect '/'
   end
   
   get '/connect' do
+    setup_client
+    
     request_token = @client.authentication_request_token(:oauth_callback=>options.twitter_oauth_config[:callback])
     
     session[:request_token] = request_token.token
@@ -98,6 +114,8 @@ class TwitterListManager < Sinatra::Base
   end
 
   get '/auth' do
+    setup_client
+    
     begin
       @access_token = @client.authorize(
           session[:request_token],
