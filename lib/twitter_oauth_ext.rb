@@ -37,7 +37,10 @@ module TwitterOAuth
   class List
     
     attr_accessor :client,:info
-    #info here is the result of client.get_list
+    
+    #params:
+    #  client: instance of TwitterOAuth::Client
+    #  info: the result of client.get_list
     def initialize client,info
       self.info = info
       self.client = client
@@ -47,10 +50,18 @@ module TwitterOAuth
       client.add_member_to_list user['screen_name'],slug, client.show(screen_name)["id"]
     end
     
+    def add_members screen_names
+      screen_names.each {|name| add_member name }
+    end
+    
     def remove_member screen_name
       client.remove_member_from_list user['screen_name'],slug, client.show(screen_name)["id"]
     end
     
+    def remove_members screen_names
+      screen_names.each {|name| remove_member name }
+    end
+
     def members
       client.list_members(user['screen_name'], slug)['users'].map{|user| User.new(client,user)}
     end

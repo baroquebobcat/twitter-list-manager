@@ -81,15 +81,11 @@ class TwitterListManager < Sinatra::Base
     pass unless @list
     
     if params['list']['remove_members']
-      params['list']['remove_members'].each do |screen_name,_|
-        @list.remove_member screen_name
-      end
+      @list.remove_members params['list']['remove_members'].keys
     end
     
     unless !params['list']['new_members'] || params['list']['new_members'].empty?
-      params['list']['new_members'].split.each do |screen_name|
-        @list.add_member screen_name
-      end
+      @list.add_members params['list']['new_members'].split
     end
     
     redirect '/'
@@ -101,9 +97,7 @@ class TwitterListManager < Sinatra::Base
     
     @list = @user.new_list params['list']['name'], params['list']['private'] ? {:mode=>'private'} : {}
     
-    params['list']['members'].split.each do |screen_name|
-      @list.add_member screen_name
-    end
+    @list.add_members params['list']['members'].split
     
     redirect '/'
   end

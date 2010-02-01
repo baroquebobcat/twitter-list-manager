@@ -46,13 +46,12 @@ describe TwitterListManager do
     end
   
     it 'removes checked members from the list' do
-      @list.should_receive(:remove_member).with 'tester'
+      @list.should_receive(:remove_members).with ['tester']
       put '/test', {'list'=>{'remove_members'=>{'tester'=>'on'}}}, @authed_session
     end
     
     it 'adds users listed in the text area' do
-      @list.should_receive(:add_member).with 'tester'
-      @list.should_receive(:add_member).with 'toaster'
+      @list.should_receive(:add_members).with ['tester','toaster']
       put '/test', {'list'=>{'new_members'=>'tester toaster'}}, @authed_session
     end
     
