@@ -87,6 +87,14 @@ class TwitterListManager < Sinatra::Base
         nil
       end
     end
+    
+    def clear_oauth_session
+      session[:user] = nil
+      session[:request_token] = nil
+      session[:request_token_secret] = nil
+      session[:access_token] = nil
+      session[:secret_token] = nil
+    end
   end
 
   get '/login' do
@@ -153,12 +161,7 @@ class TwitterListManager < Sinatra::Base
   end
   
   get '/disconnect' do
-    session[:user] = nil
-    session[:request_token] = nil
-    session[:request_token_secret] = nil
-    session[:access_token] = nil
-    session[:secret_token] = nil
-
+    clear_oauth_session
     redirect '/login'
   end
 
