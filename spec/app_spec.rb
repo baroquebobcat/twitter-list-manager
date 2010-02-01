@@ -73,7 +73,7 @@ describe TwitterListManager do
     it 'adds members if there are some' do
       @list = mock('list',:slug=>'test',:remove_member=>true)
       @user.should_receive(:new_list).with('test',{}).and_return @list
-      @list.should_receive(:add_member).with 'tester'
+      @list.should_receive(:add_members).with ['tester']
       post '/new_list',{'list'=>{'name'=>'test','members'=>'tester '}},@authed_session
       
     end

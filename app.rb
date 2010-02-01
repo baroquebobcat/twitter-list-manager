@@ -4,6 +4,7 @@ require 'twitter_oauth'
 require 'haml'
 
 require 'lib/twitter_oauth_ext'
+
 #
 # Started with http://github.com/moomerman/sinitter,
 # moomerman's example of how to use twitter_oauth,
@@ -69,7 +70,7 @@ class TwitterListManager < Sinatra::Base
   get '/' do
     login_required
     
-    @lists = @user.lists.sort{|a,b|a.name<=>b.name}
+    @lists = @user.lists.sort{|a,b| a.name <=> b.name }
     
     haml :lists
   end
@@ -97,7 +98,7 @@ class TwitterListManager < Sinatra::Base
     
     @list = @user.new_list params['list']['name'], params['list']['private'] ? {:mode=>'private'} : {}
     
-    @list.add_members params['list']['members'].split
+    @list.add_members params['list']['members'].split unless params['list']['members'].empty?
     
     redirect '/'
   end
