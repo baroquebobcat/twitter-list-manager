@@ -38,7 +38,7 @@ class TwitterListManager < Sinatra::Base
     end
     
     def setup_client
-      @client = TwitterOAuth::Client.new(
+      @client ||= TwitterOAuth::Client.new(
         :consumer_secret => options.twitter_oauth_config[:secret],
         :consumer_key => options.twitter_oauth_config[:key],
         :token  => session[:access_token],
