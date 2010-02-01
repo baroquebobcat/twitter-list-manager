@@ -44,6 +44,20 @@ class TwitterListManager < Sinatra::Base
         :secret => session[:secret_token]
       )
     end
+    
+    def authenticate
+      setup_client
+  
+     begin
+        @client.authorize(
+            session[:request_token],
+            session[:request_token_secret],
+            :oauth_verifier => params[:oauth_verifier]
+         )
+      rescue OAuth::Unauthorized => e
+        nil
+      end
+    end
   end
 
   get '/login' do
@@ -114,21 +128,10 @@ class TwitterListManager < Sinatra::Base
   end
 
   get '/auth' do
-    setup_client
-    
-    begin
-      @access_token = @client.authorize(
-          session[:request_token],
-          session[:request_token_secret],
-          :oauth_verifier => params[:oauth_verifier]
-       )
-    rescue OAuth::Unauthorized => e
-     e
-    end
-    
+    access_token = authenticate
     if @client.authorized?
-      session[:access_token] = @access_token.token
-      session[:secret_token] = @access_token.secret
+      session[:access_token] = access_token.token
+      session[:secret_token] = access_token.secret
       session[:user] = @client.info
 
       redirect '/'
