@@ -78,7 +78,11 @@ module Sinatra
       
       def get_request_token
         setup_client
-        @client.authentication_request_token(:oauth_callback=>options.twitter_oauth_config[:callback])
+        begin
+          @client.authentication_request_token(:oauth_callback=>options.twitter_oauth_config[:callback])
+        rescue e
+          halt 500,'check your key & secret'
+        end
       end
       
       def get_access_token
