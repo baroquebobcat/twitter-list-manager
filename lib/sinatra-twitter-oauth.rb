@@ -1,4 +1,5 @@
 require 'sinatra/base'
+require 'twitter_oauth'
 
 module Sinatra
   module TwitterOAuth

@@ -1,6 +1,5 @@
 require 'rubygems'
 require 'sinatra/base'
-require 'twitter_oauth'
 require 'haml'
 
 require 'lib/twitter_oauth_ext'
