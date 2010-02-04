@@ -3,14 +3,17 @@ require 'twitter_oauth'
 
 module Sinatra
   module TwitterOAuth
+    DEFAULT_CONFIG = {
+      :key      => 'changeme',
+      :secret   => 'changeme',
+      :callback => 'changeme',
+      :login_template => {:text=>'<a href="/connect">Login using Twitter</a>'}
+    }
     def self.registered app
       app.helpers Helpers
       app.enable :sessions
-      app.set :twitter_oauth_config, 
-        :key      => 'changeme',
-        :secret   => 'changeme',
-        :callback => 'changeme',
-        :login_template => {:text=>'<a href="/connect">Login using Twitter</a>'}
+      app.set :twitter_oauth_config, DEFAULT_CONFIG
+        
         
       app.get '/login' do
         redirect '/' if @user
@@ -43,16 +46,16 @@ module Sinatra
       end
     end
     
+    #options
+    # key -- oauth consumer key
+    # secret -- oauth consumer secret
+    # callback -- oauth callback url. Must be absolute. e.g. http://example.com/auth
+    # login_template -- a single entry hash with the engine as the key e.g. :login_template => {:haml => :login}
+    #def twitter_oauth_config= opts={}
+    #  self.twitter_oauth_config = DEFAULT_CONFIG.merge opts
+    #end
+    
     module Helpers
-      
-      #options
-      # key -- oauth consumer key
-      # secret -- oauth consumer secret
-      # callback -- oauth callback url. Must be absolute. e.g. http://example.com/auth
-      # login_template -- a single entry hash with the engine as the key e.g. :login_template => {:haml => :login}
-      def twitter_oauth_config options
-        options.twitter_oauth_config.merge! options
-      end
       
       def login_required
         setup_client
@@ -124,4 +127,5 @@ module Sinatra
       end
     end
   end
+  register TwitterOAuth
 end
