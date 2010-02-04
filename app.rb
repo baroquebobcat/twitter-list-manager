@@ -17,13 +17,17 @@ class TwitterListManager < Sinatra::Base
   configure do
   
     enable :methodoverride
+    
+    enable :logging
 
     set :views, File.dirname(__FILE__) + '/views'
 
-    twitter_oauth_config :key      =>ENV['TWITTER_OAUTH_KEY'],
-                         :secret   =>ENV['TWITTER_OAUTH_SECRET'],
-                         :callback => ENV['TWITTER_OAUTH_CALLBACK'],
-                         :login_template => {:haml => :login}
+    self.twitter_oauth_config= {
+      :key      =>ENV['TWITTER_OAUTH_KEY'],
+      :secret   =>ENV['TWITTER_OAUTH_SECRET'],
+      :callback => ENV['TWITTER_OAUTH_CALLBACK'],
+      :login_template => {:haml => :login}
+    }
   end
   
   get '/' do

@@ -3,17 +3,19 @@ require 'twitter_oauth'
 
 module Sinatra
   module TwitterOAuth
+  
     DEFAULT_CONFIG = {
       :key      => 'changeme',
       :secret   => 'changeme',
       :callback => 'changeme',
       :login_template => {:text=>'<a href="/connect">Login using Twitter</a>'}
     }
+  
     def self.registered app
+    
       app.helpers Helpers
       app.enable :sessions
       app.set :twitter_oauth_config, DEFAULT_CONFIG
-        
         
       app.get '/login' do
         redirect '/' if @user
@@ -78,9 +80,10 @@ module Sinatra
       
       def get_request_token
         setup_client
+        
         begin
           @client.authentication_request_token(:oauth_callback=>options.twitter_oauth_config[:callback])
-        rescue e
+        rescue StandardError => e
           halt 500,'check your key & secret'
         end
       end
