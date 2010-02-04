@@ -1,6 +1,16 @@
 require 'sinatra/base'
 require 'twitter_oauth'
-
+#Sinatra::TwitterOAuth
+#
+# A sinatra extension that abstracts away most of
+# using twitter oauth for login
+#
+#twitter_oauth_config
+#options
+# key -- oauth consumer key
+# secret -- oauth consumer secret
+# callback -- oauth callback url. Must be absolute. e.g. http://example.com/auth
+# login_template -- a single entry hash with the engine as the key e.g. :login_template => {:haml => :login}
 module Sinatra
   module TwitterOAuth
   
@@ -19,8 +29,11 @@ module Sinatra
         
       app.get '/login' do
         redirect '/' if @user
+        
         login_config = options.twitter_oauth_config[:login_template]
+        
         engine = login_config.keys.first
+        
         case engine
         when :text
           login_config[:text]
@@ -47,15 +60,6 @@ module Sinatra
         redirect '/login'
       end
     end
-    
-    #options
-    # key -- oauth consumer key
-    # secret -- oauth consumer secret
-    # callback -- oauth callback url. Must be absolute. e.g. http://example.com/auth
-    # login_template -- a single entry hash with the engine as the key e.g. :login_template => {:haml => :login}
-    #def twitter_oauth_config= opts={}
-    #  self.twitter_oauth_config = DEFAULT_CONFIG.merge opts
-    #end
     
     module Helpers
       
