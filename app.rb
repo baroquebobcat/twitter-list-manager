@@ -1,9 +1,8 @@
 require 'rubygems'
+
 require 'sinatra/base'
 require 'haml'
-
-require 'lib/twitter_oauth_ext'
-require 'lib/sinatra-twitter-oauth'
+require 'sinatra-twitter-oauth'
 
 #
 # Started with http://github.com/moomerman/sinitter,
