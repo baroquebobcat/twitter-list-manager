@@ -32,7 +32,7 @@ class TwitterListManager < Sinatra::Base
   get '/' do
     login_required
     
-    @lists = @user.lists.sort{|a,b| a.name <=> b.name }
+    @lists = user.lists.sort{|a,b| a.name <=> b.name }
     
     haml :lists
   end
@@ -40,7 +40,7 @@ class TwitterListManager < Sinatra::Base
   put '/:list_name' do
     login_required
     
-    @list = @user.list params[:list_name]
+    @list = user.list params[:list_name]
     pass unless @list
     
     if params['list']['remove_members']
@@ -58,7 +58,7 @@ class TwitterListManager < Sinatra::Base
   post '/new_list' do
     login_required
     
-    @list = @user.new_list params['list']['name'], params['list']['private'] ? {:mode=>'private'} : {}
+    @list = user.new_list params['list']['name'], params['list']['private'] ? {:mode=>'private'} : {}
     
     @list.add_members params['list']['members'].split unless params['list']['members'].empty?
     
@@ -68,7 +68,7 @@ class TwitterListManager < Sinatra::Base
   delete '/:list_name' do
     login_required
     
-    @user.destroy_list params[:list_name]
+    user.destroy_list params[:list_name]
     
     redirect '/'
   end
